@@ -1,5 +1,5 @@
 #include <FastLED.h>
-#include "config.h"
+#include "tree.h"
 
 #define LED_PIN error
 #define NUM_LEDS_PER_STRIP 150
@@ -17,13 +17,11 @@
 static CRGB leds[NUM_STRIPS][NUM_LEDS_PER_STRIP] = { 0 };
 
 void setup() {
-	// put your setup code here, to run once:
-	FastLED.addLeds<WS2812B, LED_PIN, GRB>(leds, NUM_LEDS);
-	FastLED.setBrightness(BRIGHTNESS);
+    create_tree();
+    light_led(0, 0, CHSV(0, 255, 255));
 }
 
 void loop() {
-	// put your main code here, to run repeatedly:
-	leds[0][0] = CRGB::Red;
-	FastLED.show();
+    // put your main code here, to run repeatedly:
+    FastLED.show();
 }
