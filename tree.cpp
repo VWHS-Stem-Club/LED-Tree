@@ -32,7 +32,6 @@ void destroy_tree()
     {
         destroy_bus(&tree.busses[i]);
     }
-    destroy_bus(&tree.busses[2]);
     tree = (Tree){0};
 }
 
@@ -47,7 +46,12 @@ void light_led(u8 x, u8 y, CHSV color)
 
 Bus* get_bus(u8 bus_num)
 {
-    if (bus_num > 3)
-    { return NULL; }
+    if (bus_num != 2)
+    { return nullptr; }
     return &tree.busses[bus_num];
+}
+
+void tree_show()
+{
+    FastLED.show();
 }
