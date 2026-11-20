@@ -18,6 +18,7 @@ void create_tree()
     if (initialized)
     {
         printf("Tree already initialized. Call 'destroy_tree()' first.");
+        return;
     }
     initialized = true;
     tree.brightness = brightness_scalar;
@@ -40,6 +41,7 @@ void destroy_tree()
     if (!initialized)
     {
         printf("Cannot destroy uninitialized tree. Call 'create_tree()' first.");
+        return;
     }
     initialized = false;
     for (u8 i = 0; i < 4; i++)
@@ -75,6 +77,7 @@ void light_led(u8 x, u8 y, CHSV color)
     if (!initialized)
     {
         printf("Cannot light LEDs on an uninitialized tree. Call 'create_tree()' first.");
+        return;
     }
     u8 bus_relative_x = x % (strips_per_bus * 2);
     CRGB col = color;
@@ -87,6 +90,7 @@ void light_row(u8 y, CHSV color)
     if (!initialized)
     {
         printf("Cannot light LEDs for a row on an uninitialized tree. Call 'create_tree()' first.");
+        return;
     }
     if (y > LEDs_per_strip / 2)
     {
@@ -106,6 +110,7 @@ void light_column(u8 x, CHSV color)
     if (!initialized)
     {
         printf("Cannot light LEDs for a column on an uninitialized tree. Call 'create_tree()' first.");
+        return;
     }
     if (x > strips_per_bus * 2 * 4)
     {
@@ -124,6 +129,7 @@ void light_tree(CHSV color)
     if(!initialized)
     {
         printf("Cannot light an led uninitialized tree. Call 'create_tree()' first.");
+        return;
     }
 
     for (u8 i = 0; i < 4; i++)
@@ -137,6 +143,7 @@ Bus* get_bus(u8 bus_num)
     if (!initialized)
     {
         printf("Cannot give busses to an uninitialized tree. Call 'create_tree()' first.");
+        return (Bus*){0};
     }
 
     if (bus_num != 2)
@@ -149,6 +156,7 @@ void tree_show()
     if (!initialized)
     {
         printf("Cannot show uninitialized tree. Call 'create_tree()' first.");
+        return 0;
     }
 
     FastLED.show();
@@ -156,6 +164,11 @@ void tree_show()
 
 void set_background_color(CHSV color)
 {
+    if (!initialized)
+    {
+        printf("Cannot get background color of an uninitialized tree. Call 'create_tree()' first.");
+        return;
+    }
     tree.background_color = color;
 }
 
