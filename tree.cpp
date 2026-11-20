@@ -158,3 +158,11 @@ void set_background_color(CHSV color)
 {
     tree.background_color = color;
 }
+
+CHSV get_background_color(){
+    if(!initialized){
+        printf("Cannot get background color of uninitialized tree. Call 'create_tree()' first.");
+        return CHSV(0,0,0)
+    }
+    return tree.background_color;
+}
