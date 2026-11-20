@@ -3,12 +3,12 @@
 #include "ints.h"
 
 /**
- * @brief Sets brightness and initializes the busses.
+ * @brief Sets global FastLED configuration & initializes LEDs
  */
 void create_tree();
 
 /**
- * @brief Destroys the busses and resets the tree struct.
+ * @brief Destroys LEDs & Invalidates Tree
  */
 void destroy_tree();
 
