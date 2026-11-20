@@ -13,7 +13,13 @@
 
 static u8 x = 0;
 static u8 y = 0;
+static u8 t = 0;
 static CHSV color = CHSV(0, 255, 255);
+
+// f32 lerp(f32 a, f32 b, f32 t)
+// {
+//     return a + (b - a) * t;
+// }
 
 void stripes()  
 {
@@ -70,9 +76,12 @@ void spiral()
 
 void setup() {
     create_tree();
+    t = 0;
 }
 
 void loop() {
+    t += 1;
+    color = CHSV((u8)(lerp(0.0f, 255.0f, t)), 255, 255);
     // put your main code here, to run repeatedly:
 // stripes();
     spiral();

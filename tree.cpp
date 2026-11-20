@@ -6,7 +6,7 @@
 typedef struct
 {
     Bus busses[4];
-    CSHV background_color;
+    CHSV background_color;
     u8 brightness;
 } Tree;
 
@@ -32,7 +32,7 @@ void create_tree()
     tree.busses[3] = create_bus(PIN_4);
     FastLED.show();
 
-    tree.background_color = CHSV::Black;
+    tree.background_color = CHSV(0, 0, 0);
 }
 
 void destroy_tree()
@@ -65,7 +65,7 @@ u8 tree_get_brightness()
     if (!initialized)
     {
         printf("Cannot retrieve brightness of uninitialized tree. Call 'create_tree()' first.");
-        return;
+        return 0;
     }
     return tree.brightness;
 }
@@ -78,7 +78,6 @@ void light_led(u8 x, u8 y, CHSV color)
     }
     u8 bus_relative_x = x % (strips_per_bus * 2);
     CRGB col = color;
-    // force calls to go to pin 18
     // light_bus_led(&tree.busses[x % 4], bus_relative_x, y, col);
     light_bus_led(&tree.busses[2], bus_relative_x, y, col);
 }
