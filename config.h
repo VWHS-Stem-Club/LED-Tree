@@ -6,7 +6,7 @@
 #define LEDs_per_strip (150)
 #define strips_per_bus (3)
 #define LEDs_per_bus (LEDs_per_strip * strips_per_bus)
-#define brightness_scalar (255)
+#define brightness_scalar (64)
 #define LED_max_volts (5)
 #define LED_max_amps (2500)
 #define PIN_1 16
