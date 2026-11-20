@@ -50,6 +50,12 @@ void light_row(u8 y, CHSV color);
 void light_column(u8 x, CHSV color);
 
 /**
+ *  @brief Fills the entire tree with the specified color.
+ *  @param color The color to set the LED to.
+ */
+void light_tree(CHSV color);
+
+/**
  * @brief Gets a pointer to a specific bus.
  * @param bus_num The index of the bus to retrieve.
  * @return A pointer to the requested bus.

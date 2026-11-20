@@ -120,6 +120,13 @@ void light_column(u8 x, CHSV color)
     }
 }
 
+void light_tree(CHSV color)
+{
+    for (u8 i = 0; i < 4; i++)
+    {
+        light_bus(&tree.busses[i], color);
+    }
+}
 
 Bus* get_bus(u8 bus_num)
 {
