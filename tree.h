@@ -23,6 +23,20 @@ void destroy_tree();
 void light_led(u8 x, u8 y, CHSV color);
 
 /**
+ * @brief Lights an entire row of pixels at the specified y coordinate with the specified color.
+ * @param y The y-coordinate of the LED.
+ * @param color The color to set the LED to.
+ */
+void light_row(u8 y, CHSV color);
+
+/**
+ * @brief Lights an entire column of pixels at the specified x coordinate with the specified color.
+ * @param x The x-coordinate of the LED.
+ * @param color The color to set the LED to.
+ */
+void light_column(u8 x, CHSV color);
+
+/**
  * @brief Gets a pointer to a specific bus.
  * @param bus_num The index of the bus to retrieve.
  * @return A pointer to the requested bus.

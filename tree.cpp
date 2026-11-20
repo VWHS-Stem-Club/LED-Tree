@@ -46,6 +46,34 @@ void light_led(u8 x, u8 y, CHSV color)
     light_bus_led(&tree.busses[2], bus_relative_x, y, col);
 }
 
+void light_row(u8 y, CHSV color)
+{
+    if (y > LEDs_per_strip / 2)
+    {
+        printf("Invalid y for light_row. y must be < %d", (u16)(LEDs_per_strip / 2));
+        return;
+    }
+    for (u8 x = 0; x < strips_per_bus * 2 * 4; x++)
+    {
+        light_led(x, y, color);
+    }
+}
+
+void light_column(u8 x, CHSV color)
+{
+
+    if (x > strips_per_bus * 2 * 4)
+    {
+        printf("Invalid x for light_column. x must be < %d", (u16)(strips_per_bus * 2 * 4));
+        return;
+    }
+    for (u8 y = 0; y < LEDs_per_strip / 2; y++)
+    {
+        light_led(x, y, color);
+    }
+}
+
+
 Bus* get_bus(u8 bus_num)
 {
     if (bus_num != 2)
