@@ -6,6 +6,7 @@
 typedef struct
 {
     Bus busses[4];
+    CSHV background_color;
 } Tree;
 
 static Tree tree = (Tree){0};
@@ -22,8 +23,9 @@ void create_tree()
     tree.busses[2] = create_bus(PIN_3);
     tree.busses[3] = create_bus(PIN_4);
     FastLED.show();
-}
 
+    tree.background_color = CHSV::Black;
+}
 
 void destroy_tree()
 {
@@ -54,4 +56,9 @@ Bus* get_bus(u8 bus_num)
 void tree_show()
 {
     FastLED.show();
+}
+
+void set_background_color(CHSV color)
+{
+    tree.background_color = color;
 }

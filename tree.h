@@ -33,3 +33,9 @@ Bus* get_bus(u8 bus_num);
  * @brief Displays the current state of the tree.
  */
 void tree_show();
+
+/**
+ * @brief Sets the background color of the tree.
+ * @param color The color to set as the background.
+ */
+void set_background_color(CHSV color);
