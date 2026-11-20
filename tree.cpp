@@ -6,7 +6,7 @@
 typedef struct
 {
     Bus busses[4];
-    CSHSV background_color;
+    CSHV background_color;
 } Tree;
 
 static Tree tree = (Tree){0};
