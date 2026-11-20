@@ -7,12 +7,16 @@ typedef struct
 {
     Bus busses[4];
     CSHV background_color;
+    u8 brightness;
 } Tree;
 
 static Tree tree = (Tree){0};
+static b8 initialized;
 
 void create_tree()
 {
+    initialized = true;
+    tree.brightness = brightness_scalar;
     FastLED.setBrightness(brightness_scalar);
     // ignore this for now because we don't know the numbers
 //    FastLED.setMaxPowerInVoltsAndMilliamps(LED_max_volts, LED_max_amps);
@@ -29,12 +33,33 @@ void create_tree()
 
 void destroy_tree()
 {
-    // temporarily comment out the for loop and only remove bus 2.
+    initialized = false;
     for (u8 i = 0; i < 4; i++)
     {
         destroy_bus(&tree.busses[i]);
     }
     tree = (Tree){0};
+}
+
+void tree_set_brightness(u8 brightness)
+{
+    if (!initialized)
+    {
+        printf("Cannot configure brightness of uninitialized tree. Call 'create_tree()' first.");
+        return;
+    }
+    FastLED.setBrightness(brightness);
+    tree.brightness = brightness;
+}
+
+u8 tree_get_brightness()
+{
+    if (!initialized)
+    {
+        printf("Cannot retrieve brightness of uninitialized tree. Call 'create_tree()' first.");
+        return;
+    }
+    return tree.brightness;
 }
 
 void light_led(u8 x, u8 y, CHSV color)

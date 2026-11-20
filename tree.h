@@ -13,6 +13,19 @@ void create_tree();
 void destroy_tree();
 
 /**
+ *  @brief Sets the global brightness (scalar value that all colors are mulitplied by) of the tree
+ *  @param brightness The new brightness, 0 meaning off, 255 meaning max brightness
+ */
+void tree_set_brightness(u8 brightness);
+
+/**
+ *
+ *  @brief Returns the current global brightness
+ *  @return The current global brightness
+ */
+u8 tree_get_brightness();
+
+/**
  * @brief Lights an LED at a specific position with a given color.
  * @param x The x-coordinate of the LED.
  * @param y The y-coordinate of the LED.
