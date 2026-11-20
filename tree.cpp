@@ -122,6 +122,11 @@ void light_column(u8 x, CHSV color)
 
 void light_tree(CHSV color)
 {
+    if(!initialized)
+    {
+        printf("Cannot light an led uninitialized tree. Call 'create_tree()' first.");
+    }
+
     for (u8 i = 0; i < 4; i++)
     {
         light_bus(&tree.busses[i], color);
