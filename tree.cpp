@@ -156,7 +156,7 @@ void tree_show()
     if (!initialized)
     {
         printf("Cannot show uninitialized tree. Call 'create_tree()' first.");
-        return 0;
+        return;
     }
 
     FastLED.show();
