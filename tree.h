@@ -63,6 +63,12 @@ void light_tree(CHSV color);
 Bus* get_bus(u8 bus_num);
 
 /**
+ * @brief Clears the tree by setting all changed LEDs to the background color.
+ * @note must call light_tree() before calling this function, or unchanged LEDs will remain unlit.
+ */
+void tree_clear();
+
+/**
  * @brief Displays the current state of the tree.
  */
 void tree_show();
