@@ -72,3 +72,9 @@ void tree_show();
  * @param color The color to set as the background.
  */
 void set_background_color(CHSV color);
+
+/**
+ * @brief Gets the background of the tree.
+ * @return color of tree in HSV format.
+ */
+CHSV get_background_color();
