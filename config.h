@@ -9,7 +9,9 @@
 #define brightness_scalar (64)
 #define LED_max_volts (5)
 #define LED_max_amps (2500)
-#define PIN_1 16
-#define PIN_2 17
-#define PIN_3 18
-#define PIN_4 19
+#define PIN_List \
+    X(16) \
+    X(17) \
+    X(18) \
+    X(19)
+#define num_busses (4)

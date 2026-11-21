@@ -5,7 +5,7 @@
 
 typedef struct
 {
-    Bus busses[4];
+    Bus busses[num_busses];
     CHSV background_color;
     u8 brightness;
 } Tree;
@@ -25,11 +25,10 @@ void create_tree()
     // ignore this for now because we don't know the numbers
 //    FastLED.setMaxPowerInVoltsAndMilliamps(LED_max_volts, LED_max_amps);
 
-    // busses 0, 1, and 3 are going to be unused for now, since we don't have the physical hardware hooked up yet.
-    tree.busses[0] = create_bus(PIN_1);
-    tree.busses[1] = create_bus(PIN_2);
-    tree.busses[2] = create_bus(PIN_3);
-    tree.busses[3] = create_bus(PIN_4);
+    for (u8 i = 0; i < num_busses; i++)
+    {
+        tree.busses[i] = create_bus();
+    }
     FastLED.show();
 
     tree.background_color = CHSV(0, 0, 0);
@@ -42,7 +41,7 @@ void destroy_tree()
         printf("Cannot destroy uninitialized tree. Call 'create_tree()' first.");
     }
     initialized = false;
-    for (u8 i = 0; i < 4; i++)
+    for (u8 i = 0; i < num_busses; i++)
     {
         destroy_bus(&tree.busses[i]);
     }
@@ -94,7 +93,7 @@ void light_row(u8 y, CHSV color)
         return;
     }
 
-    for (u8 x = 0; x < strips_per_bus * 2 * 4; x++)
+    for (u8 x = 0; x < strips_per_bus * 2 * num_busses; x++)
     {
         light_led(x, y, color);
     }
@@ -107,9 +106,9 @@ void light_column(u8 x, CHSV color)
     {
         printf("Cannot light LEDs for a column on an uninitialized tree. Call 'create_tree()' first.");
     }
-    if (x > strips_per_bus * 2 * 4)
+    if (x > strips_per_bus * 2 * num_busses)
     {
-        printf("Invalid x for light_column. x must be < %d", (u16)(strips_per_bus * 2 * 4));
+        printf("Invalid x for light_column. x must be < %d", (u16)(strips_per_bus * 2 * num_busses));
         return;
     }
 
@@ -126,7 +125,7 @@ void light_tree(CHSV color)
         printf("Cannot light an led uninitialized tree. Call 'create_tree()' first.");
     }
 
-    for (u8 i = 0; i < 4; i++)
+    for (u8 i = 0; i < num_busses; i++)
     {
         light_bus(&tree.busses[i], color);
     }
