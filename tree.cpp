@@ -1,11 +1,14 @@
 #include "tree.h"
 #include "config.h"
 #include "bus.h"
+#include "LED.h"
 #include <FastLED.h>
 
 typedef struct
 {
     Bus busses[4];
+    u16 change_count;
+    LED changes[strips_per_bus * LEDs_per_strip]; // assumes only one bus. needs to be changed when we un-hardcode busses
     CHSV background_color;
     u8 brightness;
 } Tree;
@@ -23,9 +26,11 @@ void create_tree()
     tree.brightness = brightness_scalar;
     FastLED.setBrightness(brightness_scalar);
     // ignore this for now because we don't know the numbers
-//    FastLED.setMaxPowerInVoltsAndMilliamps(LED_max_volts, LED_max_amps);
-
+    //    FastLED.setMaxPowerInVoltsAndMilliamps(LED_max_volts, LED_max_amps);
+    
     // busses 0, 1, and 3 are going to be unused for now, since we don't have the physical hardware hooked up yet.
+    change_count = 0;
+    memset(tree.changes, 0, sizeof(tree.changes));
     tree.busses[0] = create_bus(PIN_1);
     tree.busses[1] = create_bus(PIN_2);
     tree.busses[2] = create_bus(PIN_3);
@@ -80,6 +85,7 @@ void light_led(u8 x, u8 y, CHSV color)
     CRGB col = color;
     // light_bus_led(&tree.busses[x % 4], bus_relative_x, y, col);
     light_bus_led(&tree.busses[2], bus_relative_x, y, col);
+    tree.changes[change_count++] = (LED){bus_relative_x, y, col};
 }
 
 void light_row(u8 y, CHSV color)
@@ -144,13 +150,30 @@ Bus* get_bus(u8 bus_num)
     return &tree.busses[bus_num];
 }
 
+void tree_clear()
+{
+    if (!initialized)
+    {
+        printf("Cannot clear uninitialized tree. Call 'create_tree()' first.");
+    }
+
+    for(int i = 0; i < change_count; i++)
+    {
+        u16 bus_relative_x = tree.changes[i].x;
+        u16 y = tree.changes[i].y;
+        CRGB col = tree.background_color;
+        light_bus_led(&tree.busses[2], bus_relative_x, y, col);
+    }
+    change_count = 0;
+}
+
 void tree_show()
 {
     if (!initialized)
     {
         printf("Cannot show uninitialized tree. Call 'create_tree()' first.");
     }
-
+    
     FastLED.show();
 }
 
