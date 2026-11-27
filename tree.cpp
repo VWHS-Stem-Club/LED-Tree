@@ -138,6 +138,99 @@ void light_tree(CHSV color)
     }
 }
 
+void draw_rectangle_s(Rect rect)
+{
+    if (!initialized)
+    {
+        printf("Cannot draw rectangle on an uninitialized tree. Call 'create_tree()' first.");
+        return;
+    }
+
+    for (u16 dx = 0; dx < rect.width; dx++)
+    {
+        if (dx > rect.thickness)
+        {
+            continue;
+        }
+        for (u16 dy = 0; dy < rect.length; dy++)
+        {
+            if (dy > rect.thickness)
+            {
+                continue;
+            }
+            light_led(rect.x + dx, rect.y + dy, rect.color);
+        }
+    }
+}
+
+void draw_circle_s(Circle circle)
+{
+    if (!initialized)
+    {
+        printf("Cannot draw rectangle on an uninitialized tree. Call 'create_tree()' first.");
+        return;
+    }
+
+    /*
+     *  x^2 + y^2 = r^2 is the equation of a circle
+     *  theta = inverse tan (y/x)
+     *  just follow these constraints
+    */
+
+    u32 radius_squared = circle.radius * circle.radius;
+    u32 inner_radius = circle.radius - circle.thickness;
+    u32 inner_radius_squared = inner_radius * inner_radius;
+    for (i16 dx = -((i16)(circle.radius)); dx <= ((i16)(circle.radius)); dx++)
+    {
+        for (i16 dy = -((i16)(circle.radius)); dy <= ((i16)(circle.radius)); dy++)
+        {
+            i32 length = dx * dx + dy * dy;
+            if (length > radius_squared || length < inner_radius_squared)
+            {
+                continue;
+            }
+            i32 y = circle.y + dy;
+            if (y < 0 || y >= (LEDs_per_strip / 2))
+            {
+                continue;
+            }
+            f64 angle = atan2(dy, dx);
+            if (angle < 0)
+            {
+                angle += 2.0 * PI;
+            }
+
+            if (starting_angle <= ending_angle)
+            {
+                if (angle < starting_angle || angle > ending_angle)
+                {
+                    continue;
+                }
+            }
+            else
+            {
+                if (angle < starting_angle && angle > ending_angle)
+                {
+                    continue;
+                }
+            }
+
+            // add the total number of x's we have:
+            i32 x = circle.x + dx;
+            if (x < 0)
+            {
+                x += num_strips;
+            }
+            if (x >= num_strips)
+            {
+                x = (x % num_strips + num_strips) % num_strips;
+            }
+
+            light_led(x, y, circle.color);
+        }
+    }
+}
+
 Bus* get_bus(u8 bus_num)
 {
     if (!initialized)
@@ -173,7 +266,7 @@ void tree_show()
     {
         printf("Cannot show uninitialized tree. Call 'create_tree()' first.");
     }
-    
+
     FastLED.show();
 }
 
