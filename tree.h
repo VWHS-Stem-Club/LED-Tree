@@ -1,6 +1,8 @@
 #pragma once
 #include "bus.h"
 #include "ints.h"
+#include "rect.h"
+#include "circle.h"
 
 /**
  * @brief Sets global FastLED configuration & initializes LEDs
@@ -49,12 +51,41 @@ void light_row(u8 y, CHSV color);
  */
 void light_column(u8 x, CHSV color);
 
+
+// Helper macros to clean up code
+#define draw_rectangle(x, y, width, height, thickness, color) (draw_rectangle_s(rect_create(x, y, width, height, thickness, color)))
+#define draw_square(x, y, side, thickness, color) (draw_rectangle_s(square_create(x, y, side, thickness, color)))
+
+/**
+ *  @brief Draws the rectangle on the tree
+ *  @param rect The rectangle being drawn
+ */
+void draw_rectangle_s(Rect rect);
+
+// Helper macro to clean up code
+#define draw_circle(x, y, radius, starting_angle, ending_angle, thickness, color) (draw_circle_s(circle_create(x, y, radius, starting_angle, ending_angle, thickness, color)))
+
+/**
+ *  @brief Draws the circle on the tree
+ *  @param circle The circle being drawn
+ */
+void draw_circle_s(Circle circle);
+
+// Helper macro to clean up code
+#define draw_line(x1, y1, x2, y2, thickness, color) (draw_line_s(create_line(x1, y1, x2, y2, thickness, color)))
+
+/**
+ *  @brief Draws the line on the tree
+ *  @param line The line being drawn
+ */
+void draw_line_s(Line line);
+
 /**
  *  @brief Fills the entire tree with the specified color.
  *  @param color The color to set the LED to.
  */
 void light_tree(CHSV color);
-      
+
 /**
  * @brief Gets a pointer to a specific bus.
  * @param bus_num The index of the bus to retrieve.
