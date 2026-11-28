@@ -27,7 +27,7 @@ void create_tree()
     FastLED.setBrightness(brightness_scalar);
     // ignore this for now because we don't know the numbers
     //    FastLED.setMaxPowerInVoltsAndMilliamps(LED_max_volts, LED_max_amps);
-    
+
     // busses 0, 1, and 3 are going to be unused for now, since we don't have the physical hardware hooked up yet.
     change_count = 0;
     memset(tree.changes, 0, sizeof(tree.changes));
@@ -158,7 +158,14 @@ void draw_rectangle_s(Rect rect)
             {
                 continue;
             }
-            light_led(rect.x + dx, rect.y + dy, rect.color);
+
+            i32 y = (i32)(rect.y + dy);
+            i32 x = (i32)(rect.x + dx);
+            if (y >= 0 && y < (LEDs_per_strip / 2))
+            {
+                x = (x % num_strips + num_strips) % num_strips;
+                light_led(rect.x + dx, rect.y + dy, rect.color);
+            }
         }
     }
 }
@@ -167,7 +174,7 @@ void draw_circle_s(Circle circle)
 {
     if (!initialized)
     {
-        printf("Cannot draw rectangle on an uninitialized tree. Call 'create_tree()' first.");
+        printf("Cannot draw circle on an uninitialized tree. Call 'create_tree()' first.");
         return;
     }
 
@@ -215,18 +222,54 @@ void draw_circle_s(Circle circle)
                 }
             }
 
-            // add the total number of x's we have:
             i32 x = circle.x + dx;
-            if (x < 0)
-            {
-                x += num_strips;
-            }
-            if (x >= num_strips)
-            {
-                x = (x % num_strips + num_strips) % num_strips;
-            }
-
+            x = (x % num_strips + num_strips) % num_strips;
             light_led(x, y, circle.color);
+        }
+    }
+}
+
+// Uses Bresenham's line algorithm
+void draw_line_s(Line line)
+{
+    if (!initialized)
+    {
+        printf("Cannot draw line on an uninitialized tree. Call 'create_tree()' first.");
+        return;
+    }
+    i32 horizontal_distance = abs(line.x2 - line.x1);
+    i32 vertical_distance = abs(line.y2 - line.y1);
+
+    i32 horizontal_direction = (line.x1 < line.x2) ? 1 : -1;
+    i32 vertical_direction = (line.y1 < line.y2) ? 1 : -1;
+    i32 error = horizontal_distance - vertical_distance;
+
+    i32 x = line.x1;
+    i32 y = line.y1;
+    while (true)
+    {
+        if (y >= 0 && y < (LEDs_per_strip / 2))
+        {
+            i32 renderx = (x % num_strips + num_strips) % num_strips;
+            light_led(renderx, y, line.color);
+        }
+
+        if (x == line.x2 && y == line.y2)
+        {
+            break;
+        }
+
+        i32 doubled = error * 2;
+        if (doubled > -vertical_distance)
+        {
+            error -= vertical_distance;
+            x += horizontal_direction;
+        }
+
+        if (doubled < horizontal_distance)
+        {
+            error += horizontal_distance;
+            y += vertical_direction;
         }
     }
 }

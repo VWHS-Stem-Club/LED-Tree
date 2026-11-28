@@ -1,5 +1,6 @@
 #pragma once
 #include "ints.h"
+#include "FastLED.h"
 
 typedef struct
 {
