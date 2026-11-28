@@ -152,7 +152,7 @@ void draw_rectangle_s(Rect rect)
         {
             continue;
         }
-        for (u16 dy = 0; dy < rect.length; dy++)
+        for (u16 dy = 0; dy < rect.height; dy++)
         {
             if (dy > rect.thickness)
             {
